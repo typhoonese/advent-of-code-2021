@@ -67,7 +67,7 @@
 
 # Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 
-filePath = './seaDepth.txt'
+filePath = '../data/seaDepth.txt'
 seaDepthFile = open(filePath, 'r')
 seaDepthLines = seaDepthFile.readlines()
 
