@@ -74,16 +74,20 @@ seaDepthLines = seaDepth.readlines()
 
 # Puzzle 1
 countOfIncrease = 0
-for depth in range(1, len(seaDepthLines)):
-    if(int(seaDepthLines[depth]) > int(seaDepthLines[depth-1])):
+startIndex = 1
+for depth in range(startIndex, len(seaDepthLines)):
+    if(int(seaDepthLines[depth]) > int(seaDepthLines[depth-startIndex])):
         countOfIncrease += 1
 
-print("Number of increase for Puzzle 1: ", countOfIncrease)
+print("[Puzzle 1] - Number of depth increase : ", countOfIncrease)
 
 # Puzzle 2
+# let the depth sequence be X1, X2, X3, X4, X5, X6
+# S1 = X1 + X2 + X3, S2 = X2 + X3 + X4. S2 - S 1 = X4-X1
 countOfIncrease = 0
-for depth in range(3, len(seaDepthLines)):
-    if(int(seaDepthLines[depth]) > int(seaDepthLines[depth-3])):
+startIndex = 3
+for depth in range(startIndex, len(seaDepthLines)):
+    if(int(seaDepthLines[depth]) > int(seaDepthLines[depth-startIndex])):
         countOfIncrease += 1
 
-print("Number of increase for Puzzle 2: ", countOfIncrease)
+print("[Puzzle 2] - Number of depth increase : ", countOfIncrease)
