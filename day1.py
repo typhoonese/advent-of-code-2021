@@ -67,10 +67,9 @@
 
 # Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 
-path = '/home/nufyatese/code/adventOfCode/seaDepth.txt'
-
-seaDepth = open(path, 'r')
-seaDepthLines = seaDepth.readlines()
+filePath = './seaDepth.txt'
+seaDepthFile = open(filePath, 'r')
+seaDepthLines = seaDepthFile.readlines()
 
 # Puzzle 1
 countOfIncrease = 0
