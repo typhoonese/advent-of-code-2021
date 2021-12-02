@@ -67,11 +67,13 @@ moveUp = 'up'
 for move in range(len(submarineMovements)):
     splitCommand = submarineMovements[move].split()
     positionChange = int(splitCommand[1])
-    if splitCommand[0] == moveForward:
+    moveCommand = splitCommand[0]
+
+    if moveCommand == moveForward:
         horizontalPosition += positionChange
-    elif splitCommand[0] == moveDown:
+    elif moveCommand == moveDown:
         depthPosition += positionChange
-    elif splitCommand[0] == moveUp:
+    elif moveCommand == moveUp:
         depthPosition -= positionChange
     else:
         print("Unexpected move command")
@@ -93,12 +95,14 @@ decreaseAim = 'up'
 for move in range(len(submarineMovements)):
     splitCommand = submarineMovements[move].split()
     unitChange = int(splitCommand[1])
-    if splitCommand[0] == moveForward:
+    moveCommand = splitCommand[0]
+
+    if moveCommand == moveForward:
         horizontalPosition += unitChange
         depthPosition += unitChange * aim
-    elif splitCommand[0] == increaseAim:
+    elif moveCommand == increaseAim:
         aim += unitChange
-    elif splitCommand[0] == decreaseAim:
+    elif moveCommand == decreaseAim:
         aim -= unitChange
     else:
         print("Unexpected move command")
