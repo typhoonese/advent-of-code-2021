@@ -62,26 +62,35 @@
 
 # Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together. What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
 
-def frequencyFinder(diagnosticLines, binaryFrequency):
-    for index in range(len(diagnosticsLines)):
-        diagnostic = diagnosticsLines[index].strip()
-        for position in range(len(binaryFrequency)):
-            binaryFrequency[position] += int(diagnostic[position])
-    return binaryFrequency
+def frequencyFinder(list):
+    # frequency = [0, 0, 0, 0, 0]
+    frequency = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    for index in range(len(list)):
+        diagnostic = list[index].strip()
+        for position in range(len(frequency)):
+            frequency[position] += int(diagnostic[position])
+    return frequency
+
+
+def findDiagnostic(diagnostics, position, condition):
+    newDiagnostics = []
+    for index in range(len(diagnostics)):
+        if diagnostics[index][position] == condition:
+            newDiagnostics.append(diagnostics[index].strip())
+    return newDiagnostics
 
 
 filePath = '../data/diagnostics.txt'
 diagnosticsFile = open(filePath, 'r')
 diagnosticsLines = diagnosticsFile.readlines()
-binaryFrequency = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-# binaryFrequency = [0, 0, 0, 0, 0]
+binaryFrequency = []
 gammaRate = ''
 epsilonRate = ''
 powerConsumption = 0
 
 # Part 1
 
-binaryFrequency = frequencyFinder(diagnosticsLines, binaryFrequency)
+binaryFrequency = frequencyFinder(diagnosticsLines)
 
 print(binaryFrequency)
 
@@ -93,8 +102,44 @@ for index in range(len(binaryFrequency)):
         gammaRate += '0'
         epsilonRate += '1'
 
-print("Gamme rate  : ", gammaRate)
+print("Gamma rate  : ", gammaRate)
 print("Epsilon rate: ", epsilonRate)
 print("Power consumption: ", int(gammaRate, 2) * int(epsilonRate, 2))
 
 # Part 2
+
+oxygenGenerator = diagnosticsLines
+for index in range(len(oxygenGenerator)):
+
+    binaryFrequency = frequencyFinder(oxygenGenerator)
+    if binaryFrequency[index] >= len(oxygenGenerator)/2:
+        oxygenGenerator = findDiagnostic(oxygenGenerator, index, '1')
+    elif binaryFrequency[index] < len(oxygenGenerator)/2:
+        oxygenGenerator = findDiagnostic(oxygenGenerator, index, '0')
+    else:
+        print("Unexpected")
+        break
+
+    if(len(oxygenGenerator) == 1):
+        break
+
+co2Scrubber = diagnosticsLines
+for index in range(len(co2Scrubber)):
+
+    binaryFrequency = frequencyFinder(co2Scrubber)
+    if binaryFrequency[index] >= len(co2Scrubber)/2:
+        co2Scrubber = findDiagnostic(co2Scrubber, index, '0')
+    elif binaryFrequency[index] < len(co2Scrubber)/2:
+        co2Scrubber = findDiagnostic(co2Scrubber, index, '1')
+    else:
+        print("Unexpected")
+        break
+
+    if(len(co2Scrubber) == 1):
+        break
+
+print("\nResults")
+print("Oxygen Generator: ", oxygenGenerator[0])
+print("CO2 Scrubber    : ", co2Scrubber[0])
+print("Life support rating: ", int(
+    oxygenGenerator[0], 2) * int(co2Scrubber[0], 2))
