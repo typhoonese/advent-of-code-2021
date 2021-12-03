@@ -84,15 +84,14 @@ filePath = '../data/diagnostics.txt'
 diagnosticsFile = open(filePath, 'r')
 diagnosticsLines = diagnosticsFile.readlines()
 binaryFrequency = []
-gammaRate = ''
-epsilonRate = ''
-powerConsumption = 0
+
 
 # Part 1
 
-binaryFrequency = frequencyFinder(diagnosticsLines)
+gammaRate = ''
+epsilonRate = ''
 
-print(binaryFrequency)
+binaryFrequency = frequencyFinder(diagnosticsLines)
 
 for index in range(len(binaryFrequency)):
     if binaryFrequency[index] > len(diagnosticsLines)/2:
@@ -110,7 +109,6 @@ print("Power consumption: ", int(gammaRate, 2) * int(epsilonRate, 2))
 
 oxygenGenerator = diagnosticsLines
 for index in range(len(oxygenGenerator)):
-
     binaryFrequency = frequencyFinder(oxygenGenerator)
     if binaryFrequency[index] >= len(oxygenGenerator)/2:
         oxygenGenerator = findDiagnostic(oxygenGenerator, index, '1')
