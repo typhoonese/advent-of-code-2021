@@ -16,7 +16,11 @@ for line in coordinatesLines:
 
 cleanedCoordinates = []
 for row in coordinates:
-    if (row[0] == row[2] or row[1] == row[3]):
+    x1 = row[0]
+    y1 = row[1]
+    x2 = row[2]
+    y2 = row[3]
+    if (x1 == x2 or y1 == y2 or (abs((y2-y1)/(x2-x1)) == 1)):
         cleanedCoordinates.append(row)
 del coordinates
 
@@ -26,33 +30,51 @@ for row in cleanedCoordinates:
         if row[i] > maxVal:
             maxVal = row[i]
 
-
 # Part 1
 allCoordinates = []
-
 for row in cleanedCoordinates:
+    x1 = row[0]
+    y1 = row[1]
+    x2 = row[2]
+    y2 = row[3]
     coordinateSystem = np.zeros((maxVal+1, maxVal+1))
-    for i in range(len(row)):
-        # vertical lines
-        if (row[0] == row[2]):
-            for i in range(min(row[1], row[3]), max(row[1], row[3])+1):
-                coordinateSystem[row[0]][i] = 1
-        # horizontal lines
-        elif (row[1] == row[3]):
-            for i in range(min(row[0], row[2]), max(row[0], row[2])+1):
-                coordinateSystem[i][row[1]] = 1
-        else:
-            print("Unexpected")
-            print(row[0], row[2], row[1], row[3])
+    # horizontal lines
+    if (x1 == x2 and y1 != y2):
+        for i in range(min(y1, y2), max(y1, y2)+1):
+            coordinateSystem[i][x1] = 1
+    # vertical lines
+    elif (y1 == y2 and x1 != x2):
+        for i in range(min(x1, x2), max(x1, x2)+1):
+            coordinateSystem[y1][i] = 1
+    # positive slope x1=y1
+    elif x1 == y1 and x2 == y2:
+        for i in range(max(x1, x2)-min(x1, x2)+1):
+            coordinateSystem[min(y1, y2)+i][min(x1, x2)+i] = 1
+    # positive slope
+    elif (y2-y1)/(x2-x1) == 1:
+        for i in range(max(x1, x2) - min(x1, x2)+1):
+            coordinateSystem[min(y1, y2)+i][min(x1, x2)+i] = 1
+    # negative slope
+    elif (y2-y1)/(x2-x1) == -1:
+        for i in range(abs(x1-x2)+1):
+            tempX = min(x1, x2)
+            tempY = -1
+            if tempX == x1:
+                tempY = y1
+            else:
+                tempY = y2
+            coordinateSystem[tempY-i][tempX+i] = 1
+    else:
+        print("\nUnexpected")
+        print(x1, x2, y1, y2)
     allCoordinates.append(coordinateSystem)
-
-x = np.zeros((2, 2))
 
 # sum all coordinates
 ventMap = np.zeros((maxVal+1, maxVal+1))
 for matrix in allCoordinates:
     ventMap += matrix
 
+# count the points (x, y) that are > 1
 total = 0
 for row in range(maxVal+1):
     for column in range(maxVal+1):
