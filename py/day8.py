@@ -28,46 +28,19 @@ for row in outputs:
 print("[Task 1]", counter)
 
 # task 2
-
-# segments
-# top, middle, bottom
-# topLeft, bottomLeft,
-# topRight, bottomRight
-
-# 1, 4, 7, 8
-# set7 - set1 = top
-
-# from 2,3,5 --> bottom left, top right, bottom right, top left
-# set2 - set3 = bottom left
-# set2 - set5 = top right + bottom left
-
-# set3 - set2 = bottom right
-# set3 - set5 = top right + bottom right
-
-# set5 - set3 = top left
-# set5 - set2 = top left
-
-# from 0, 6, 9 --> bottom left, top right, middle
-# set0 - set9 = bottom left
-# set0 - set6 = top right
-
-# set6 - set0 = middle
-# set6 - set9 = bottom left
-
-# set9 - set0 = middle
-# set9 - set0 = top right
-
-# others
-# set8 - set0 = middle
+# segments: top (t), middle (m), bottom (b), topLeft (tL), bottomLeft (bL), topRight (tR), bottomRight (bR)
 
 decodedOutputs = []
 for index in range(len(signals)):
 
+    # set1 consists of signals for digit 1
     set1 = {}
     set4 = {}
     set7 = {}
     set8 = {}
+    # setOf6 consists of all signals of length 6 (corresponds to 0,6,9)
     setOf6 = []
+    # setOf5 consists of all signals of length 5 (corresponds to 2,3,5)
     setOf5 = []
 
     for element in signals[index]:
@@ -88,6 +61,13 @@ for index in range(len(signals)):
             break
 
     # Figure out bottom left, top right, middle
+    # from 0, 6, 9 --> bottom left, top right, middle
+    # set0 - set9 = bottom left
+    # set0 - set6 = top right
+    # set6 - set0 = middle
+    # set6 - set9 = bottom left
+    # set9 - set0 = middle
+    # set9 - set0 = top right
     bL_tR_M = set(())
     bL_tR_M.update(setOf6[0].difference(setOf6[1]))
     bL_tR_M.update(setOf6[0].difference(setOf6[2]))
@@ -97,6 +77,13 @@ for index in range(len(signals)):
     bL_tR_M.update(setOf6[2].difference(setOf6[1]))
 
     # Figure out bottom left, top right, bottom right, top left
+    # from 2,3,5 --> bottom left, top right, bottom right, top left
+    # set2 - set3 = bottom left
+    # set2 - set5 = top right + bottom left
+    # set3 - set2 = bottom right
+    # set3 - set5 = top right + bottom right
+    # set5 - set3 = top left
+    # set5 - set2 = top left
     bL_tR_bR_tL = set(())
     bL_tR_bR_tL.update(setOf5[0].difference(setOf5[1]))
     bL_tR_bR_tL.update(setOf5[0].difference(setOf5[2]))
