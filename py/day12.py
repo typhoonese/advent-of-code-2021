@@ -1,24 +1,32 @@
 def beenToSameSmallCave(path):
-    pathLastIndex = len(path)-1
-    lastCave = path[pathLastIndex]
-    found = path[0:pathLastIndex].find(lastCave)
+    pathLastIndex = len(path)-2
+    lastCave = path[pathLastIndex:]
+    found = path[0:pathLastIndex-2].find(lastCave)
     if found == -1:
         return 0, path
     else:
         return 1, path[0:pathLastIndex]
 
 
+def checkIfSmallCave(cave):  # cave is the letter(s) representing the cave
+    isSmallCave = 1
+    isBigCave = 0
+    if ord(cave[0]) >= 97 and ord(cave[0]) <= 122:
+        return isSmallCave
+    return isBigCave
+
+
 def makePath(path, nextStop):
     if nextStop == 'end':
         possiblePaths.append(path)
     # if the next cave is a big cave
-    elif ord(nextStop) >= 65 and ord(nextStop) <= 90:
+    elif not checkIfSmallCave(nextStop):
         path += nextStop
         nextStops = paths[nextStop]
         for stop in nextStops:
             makePath(path, stop)
     # if the next cave is a small cave, check if been before
-    elif ord(nextStop) >= 97 and ord(nextStop) <= 122:
+    elif checkIfSmallCave(nextStop):
         if nextStop not in paths:
             return 0
         path += nextStop
@@ -30,32 +38,46 @@ def makePath(path, nextStop):
         else:
             return 0
 
-        # read file
+
+# read file
 sourcePath = '../data/passage.txt'
 passageFile = open(sourcePath, 'r')
 passageLines = passageFile.readlines()
 
-paths = {}
-possiblePaths = []
+paths = {}  # dictionary of possible connections
+possiblePaths = []  # possible paths that go to the end cave
 for line in passageLines:
     line = tuple(line.strip().split('-'))
-    if line[0] not in paths:
-        paths[line[0]] = []
-    paths[line[0]].append(line[1])
 
-    # if line is A -> b, map b -> A as from b can be returned to A
-    if len(line[0]) == 1 and len(line[1]) == 1 and ord(line[0]) >= 65 and ord(line[0]) <= 90:
-        if line[1] not in paths:
-            paths[line[1]] = []
-        paths[line[1]].append(line[0])
+    connection1 = line[0]
+    connection2 = line[1]
 
-print("PATHS:", paths)
+    if connection1 == 'end':
+        if connection2 not in paths:
+            paths[connection2] = []
+        paths[connection2].append(connection1)
+    elif connection1 == 'start':
+        if connection1 not in paths:
+            paths[connection1] = []
+        paths[connection1].append(connection2)
+    elif connection2 == 'start':
+        if connection2 not in paths:
+            paths[connection2] = []
+        paths[connection2].append(connection1)
+    elif connection2 == 'end':
+        if connection1 not in paths:
+            paths[connection1] = []
+        paths[connection1].append(connection2)
+    else:
+        if connection1 not in paths:
+            paths[connection1] = []
+        if connection2 not in paths:
+            paths[connection2] = []
+        paths[connection1].append(connection2)
+        paths[connection2].append(connection1)
 
 firstStop = 'start'
 path = ''
 for nextStop in paths[firstStop]:
     makePath(path, nextStop)
-
 print("Paths found:", len(possiblePaths))
-for path in possiblePaths:
-    print("\nPath:", path)
